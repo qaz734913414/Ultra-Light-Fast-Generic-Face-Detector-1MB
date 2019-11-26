@@ -6,11 +6,11 @@ This model is a lightweight facedetection model designed for edge computing devi
 
 - In terms of model size, the default FP32 precision (.pth) file size is **1.04~1.1MB**, and the inference frame int8 quantization size is about **300KB**.
 - In terms of the calculation amount of the model, the input resolution of 320x240 is about **90~109 MFlops**.
-- There are two versions of the model, version-slim (network backbone simplification,slightly faster) adn version-RFB (with the modified RFB module, higher precision).
+- There are two versions of the model, version-slim (network backbone simplification,slightly faster) and version-RFB (with the modified RFB module, higher precision).
 - Widerface training pre-training model with different input resolutions of 320x240 and 640x480 is provided to better work in different application scenarios.
 - Support for onnx export for ease of migration and inference.
 - [Provide NCNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/ncnn).
-- [Provide MNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN), [FP32/INT8 quantized models](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/model).
+- [Provide MNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN), [MNN Python inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/python), [FP32/INT8 quantized models](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/model).
 - [Provide Caffe model](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe/model) and [onnx2caffe conversion code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe).
 
 ## Tested the environment that works
@@ -132,7 +132,7 @@ sh train-version-slim.sh or sh train-version-RFB.sh
 ## Completed list
  - [Widerface test code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/widerface_evaluate)
  - [NCNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/ncnn) ([vealocia](https://github.com/vealocia))
- - [MNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN)
+ - [MNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN), [MNN Python inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/python)
  - [Caffe model](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe/model) and [onnx2caffe conversion code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe).
  
 ##  Reference
