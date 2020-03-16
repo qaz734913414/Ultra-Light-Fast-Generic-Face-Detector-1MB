@@ -4,7 +4,7 @@
 ![img1](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/readme_imgs/27.jpg)
 This model is a lightweight facedetection model designed for edge computing devices.
 
-- In terms of model size, the default FP32 precision (.pth) file size is **1.04~1.1MB**, and the inference frame int8 quantization size is about **300KB**.
+- In terms of model size, the default FP32 precision (.pth) file size is **1.04~1.1MB**, and the inference framework int8 quantization size is about **300KB**.
 - In terms of the calculation amount of the model, the input resolution of 320x240 is about **90~109 MFlops**.
 - There are two versions of the model, version-slim (network backbone simplification,slightly faster) and version-RFB (with the modified RFB module, higher precision).
 - Widerface training pre-training model with different input resolutions of 320x240 and 640x480 is provided to better work in different application scenarios.
@@ -12,7 +12,8 @@ This model is a lightweight facedetection model designed for edge computing devi
 - [Provide NCNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/ncnn).
 - [Provide MNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN), [MNN Python inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/python), [FP32/INT8 quantized models](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/model).
 - [Provide Caffe model](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe/model) and [onnx2caffe conversion code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe).
-
+- [Caffe python inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/caffe/ultra_face_caffe_inference.py) and [OpencvDNN inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/caffe/ultra_face_opencvdnn_inference.py).
+ 
 ## Tested the environment that works
 - Ubuntu16.04、Ubuntu18.04、Windows 10（for inference）
 - Python3.6
@@ -44,11 +45,11 @@ version-slim|0.853     |0.819       |0.539
 version-RFB|0.855     |**0.822**       |**0.579**
 
 > - This part mainly tests the effect of the test set under the medium and small resolutions.
-> - RetinaFace-mnet (Retinaface-Mobilenet-0.25), from a great job [insightface](https://github.com/deepinsight/insightface), when testing this network, the original image is scaled by 320 or 640 as the maximum side length, so the face will not be deformed, and the rest of the network will have a fixed size resize. At the same time, the result of the RetinaFace-mnet optimal 1600 single-scale val set was 0.887 (Easy) / 0.87 (Medium) / 0.791 (Hard).
+> - RetinaFace-mnet (Retinaface-Mobilenet-0.25), from a great job [insightface](https://github.com/deepinsight/insightface), when testing this network, the original image is scaled by 320 or 640 as the maximum side length, so the face will not be deformed, and the rest of the networks will have a fixed size resize. At the same time, the result of the RetinaFace-mnet optimal 1600 single-scale val set was 0.887 (Easy) / 0.87 (Medium) / 0.791 (Hard).
 
 ### Terminal device inference speed
 
-- Raspberry Pi 4B MNN inference test time **(unit: ms)** (ARM/A72x4/1.5GHz/input resolution: **320x240** /int8 quantization)
+- Raspberry Pi 4B MNN Inference Latency **(unit: ms)** (ARM/A72x4/1.5GHz/input resolution: **320x240** /int8 quantization)
 
 Model|1 core|2 core|3 core|4 core
 ------|--------|----------|--------|--------
@@ -57,6 +58,19 @@ Official Retinaface-Mobilenet-0.25 (Mxnet)   |46|25|18.5|15
 version-slim|29     |**16**       |**12**|**9.5**
 version-RFB|35     |19.6       |14.8| 11
 
+- iPhone 6s Plus MNN (version tag：0.2.1.5) Inference Latency ( input resolution : **320x240** )[Data comes from  MNN official](https://www.yuque.com/mnn/en/demo_zoo#bXsRY)
+
+Model|Inference Latency(ms)
+------|--------
+[slim-320](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/MNN/model/version-slim/slim-320.mnn) |6.33
+[RFB-320](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/MNN/model/version-RFB/RFB-320.mnn)|7.8
+
+- [Kendryte K210](https://kendryte.com/) NNCase Inference Latency (RISC-V/400MHz/input resolution: **320x240** /int8 quantization)[Data comes from NNCase](https://github.com/kendryte/nncase/tree/master/examples/fast_facedetect)
+
+Model|Inference Latency(ms)
+------|--------
+[slim-320](https://github.com/kendryte/nncase/tree/master/examples/fast_facedetect/k210/kpu_fast_facedetect_example/slim-320.kmodel)|65.6
+[RFB-320](https://github.com/kendryte/nncase/tree/master/examples/fast_facedetect/k210/kpu_fast_facedetect_example/RFB-320.kmodel)|164.8
 
 ### Model size comparison
 - Comparison of several open source lightweight face detection models:
@@ -73,9 +87,9 @@ version-RFB| **1.11**
 
 1. Download the wideface official website dataset or download the training set I provided and extract it into the ./data folder:
 
-  (1) The clean widerface data pack after filtering out the 10px*10px small face: [Baidu cloud disk (extraction code: x5gt)](https://pan.baidu.com/s/1m600pp-AsNot6XgIiqDlOw) 、[Google Drive](https://drive.google.com/open?id=1OBY-Pk5hkcVBX1dRBOeLI4e4OCvqJRnH )
+  (1) The clean widerface data pack after filtering out the 10px*10px small face: [Baidu cloud disk (extraction code: cbiu)](https://pan.baidu.com/s/1MR0ZOKHUP_ArILjbAn03sw) 、[Google Drive](https://drive.google.com/open?id=1OBY-Pk5hkcVBX1dRBOeLI4e4OCvqJRnH )
   
-  (2) Complete widerface data compression package without filtering small faces: [Baidu cloud disk (extraction code: xeis)](https://pan.baidu.com/s/1Qusz-CjIzsILmjv6jtFpXQ)、[Google Drive](https://drive.google.com/open?id=1sbBrDRgctEkymIpCh1OZBrU5qBS-SnCP )
+  (2) Complete widerface data compression package without filtering small faces: [Baidu cloud disk (extraction code: ievk)](https://pan.baidu.com/s/1faHNz9ZrtEmr_yw48GW7ZA)、[Google Drive](https://drive.google.com/open?id=1sbBrDRgctEkymIpCh1OZBrU5qBS-SnCP )
 
 2. **(PS: If you download the filtered packets in (1) above, you don't need to perform this step)** Because the wideface has many small and unclear faces, which is not conducive to the convergence of efficient models, it needs to be filtered for training.By default,faces smaller than 10 pixels by 10 pixels will be filtered.
 run ./data/wider_face_2_voc_add_landmark.py
@@ -133,8 +147,15 @@ sh train-version-slim.sh or sh train-version-RFB.sh
  - [Widerface test code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/widerface_evaluate)
  - [NCNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/ncnn) ([vealocia](https://github.com/vealocia))
  - [MNN C++ inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN), [MNN Python inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/MNN/python)
- - [Caffe model](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe/model) and [onnx2caffe conversion code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe).
- 
+ - [Caffe model](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe/model) and [onnx2caffe conversion code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/tree/master/caffe)
+ - [Caffe python inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/caffe/ultra_face_caffe_inference.py) and [OpencvDNN inference code](https://github.com/Linzaer/Ultra-Light-Fast-Generic-Face-Detector-1MB/blob/master/caffe/ultra_face_opencvdnn_inference.py)
+  
+## Third-party related projects
+ - [NNCase C++ inference code](https://github.com/kendryte/nncase/tree/master/examples/fast_facedetect)
+ - [UltraFaceDotNet (C#)](https://github.com/takuya-takeuchi/UltraFaceDotNet)
+ - [faceDetect-ios](https://github.com/Ian778/faceDetect-ios)
+ - [Android-FaceDetection-UltraNet-MNN](https://github.com/jackweiwang/Android-FaceDetection-UltraNet-MNN)
+  
 ##  Reference
 - [pytorch-ssd](https://github.com/qfgaohao/pytorch-ssd)
 - [libfacedetection](https://github.com/ShiqiYu/libfacedetection/)
